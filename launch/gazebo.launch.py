@@ -31,6 +31,20 @@ def generate_launch_description():
         'robot.urdf'
     )
 
+    rviz = Node(
+    package='rviz2',
+    executable='rviz2',
+    name='rviz2',
+    output='screen',
+    )
+
+    joint_state_publisher_gui = Node(
+    package='joint_state_publisher_gui',
+    executable='joint_state_publisher_gui',
+    name='joint_state_publisher_gui',
+    output='screen',
+    )
+
     # ---------------------------------------------------------
     # Read URDF
     # ---------------------------------------------------------
@@ -42,6 +56,12 @@ def generate_launch_description():
     # Gazebo Fortress
     # ---------------------------------------------------------
 
+    world_file = os.path.join(
+    get_package_share_directory('my_robot_description'),
+    'worlds',
+    'lidar_world_trapped.sdf'
+    )
+    
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(
@@ -51,7 +71,7 @@ def generate_launch_description():
             )
         ),
         launch_arguments={
-            'gz_args': '-r empty.sdf'
+            'gz_args': world_file + ' -r'
         }.items()
     )
 
@@ -75,7 +95,9 @@ def generate_launch_description():
     package='ros_gz_bridge',
     executable='parameter_bridge',
     arguments=[
-        '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
+        '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+        '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
+
     ],
     output='screen',
     )
@@ -152,6 +174,8 @@ def generate_launch_description():
     # ---------------------------------------------------------
 
     return LaunchDescription([
+    rviz,
+    joint_state_publisher_gui,
     gazebo,
     ros_gz_bridge,
     robot_state_publisher,
