@@ -59,7 +59,7 @@ def generate_launch_description():
     world_file = os.path.join(
     get_package_share_directory('my_robot_description'),
     'worlds',
-    'lidar_world_trapped.sdf'
+    'slam_world.sdf'
     )
     
     gazebo = IncludeLaunchDescription(
@@ -175,7 +175,6 @@ def generate_launch_description():
 
     return LaunchDescription([
     rviz,
-    joint_state_publisher_gui,
     gazebo,
     ros_gz_bridge,
     robot_state_publisher,
