@@ -102,6 +102,22 @@ def generate_launch_description():
     output='screen',
     )
 
+    slam_params_file = os.path.join(
+        pkg_my_robot_description,
+        'config',
+        'slam_toolbox.yaml'
+        )
+    
+    slam_toolbox = Node(
+        package='slam_toolbox',
+        executable='async_slam_toolbox_node',
+        name='slam_toolbox',
+        output='screen',
+        parameters=[
+            slam_params_file
+            ],
+        )
+
     # ---------------------------------------------------------
     # Spawn robot into Gazebo
     # ---------------------------------------------------------
@@ -181,4 +197,5 @@ def generate_launch_description():
     spawn_robot,
     start_joint_state_broadcaster,
     start_diff_drive_controller,
+    slam_toolbox,
     ])
